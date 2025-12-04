@@ -147,36 +147,45 @@ forge test --gas-report
 - ✅ Gas optimization comparisons
 - ✅ Fuzz testing (random inputs)
 
-## 📦 Deployment
+## 📦 Deployment & Interaction
 
-### Local Development (Anvil)
+**Just like Remix IDE with MetaMask!**
 
+### Quick Start
+
+**Local (Anvil):**
 ```bash
-# Terminal 1: Start local blockchain
+# Terminal 1
 anvil
 
-# Terminal 2: Deploy contracts (example)
-forge create src/1-simple-storage/SimpleStorage.sol:SimpleStorage --rpc-url http://localhost:8545 --private-key <anvil-private-key>
+# Terminal 2 - Deploy FundMe
+forge script script/DeployFundMe.s.sol --rpc-url http://localhost:8545 --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-### Testnet Deployment (Sepolia)
-
+**Sepolia Testnet:**
 ```bash
-# 1. Copy environment template
+# 1. Setup environment
 cp .env.example .env
+# Edit .env with your RPC URL, private key, and Etherscan API key
 
-# 2. Add your configuration to .env:
-#    - SEPOLIA_RPC_URL (get from Alchemy/Infura)
-#    - PRIVATE_KEY (your wallet private key)
-#    - ETHERSCAN_API_KEY (for verification)
-
-# 3. Deploy (example for SimpleStorage)
+# 2. Deploy
 source .env
-forge create src/1-simple-storage/SimpleStorage.sol:SimpleStorage \
-    --rpc-url $SEPOLIA_RPC_URL \
-    --private-key $PRIVATE_KEY \
-    --verify
+forge script script/DeployFundMe.s.sol --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify
 ```
+
+### Interact with Deployed Contracts
+
+**Fund the contract (like clicking "fund" in Remix):**
+```bash
+cast send <CONTRACT_ADDRESS> "fund()" --value 0.01ether --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY
+```
+
+**Check balance (like view functions in Remix):**
+```bash
+cast call <CONTRACT_ADDRESS> "getBalance()(uint256)" --rpc-url $SEPOLIA_RPC_URL
+```
+
+**📖 See full guide:** [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
 
 ## 💡 Key Learning Outcomes
 
